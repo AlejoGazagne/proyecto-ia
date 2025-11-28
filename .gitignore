@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Docker
+.dockerignore
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Shared workspace temporal files
+shared_workspace/*
+!shared_workspace/.gitkeep
+
+# n8n data
+n8n_data/
+
+# Test files
+tests/__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+tmp/
+temp/

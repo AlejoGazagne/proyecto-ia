@@ -1,0 +1,140 @@
+services:
+  # API Principal - Coordinador de microservicios
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: eth-security-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    environment:
+      - SLITHER_URL=http://slither:8001
+      - SOLC_URL=http://solc:8002
+      - MEDUSA_URL=http://medusa:8003
+      - ECHIDNA_URL=http://echidna:8004
+    networks:
+      - eth-security-network
+    volumes:
+      - shared_workspace:/workspace
+    depends_on:
+      - slither
+      - solc
+      - medusa
+      - echidna
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+
+  # Servicio Slither - Análisis de seguridad
+  slither:
+    build:
+      context: ./slither
+      dockerfile: Dockerfile
+    container_name: eth-security-slither
+    ports:
+      - "8001:8001"
+    networks:
+      - eth-security-network
+    volumes:
+      - shared_workspace:/workspace
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+
+  # Servicio Solc - Compilador de Solidity
+  solc:
+    build:
+      context: ./solc
+      dockerfile: Dockerfile
+    container_name: eth-security-solc
+    ports:
+      - "8002:8002"
+    networks:
+      - eth-security-network
+    volumes:
+      - shared_workspace:/workspace
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  # Servicio Medusa - Fuzzing
+  medusa:
+    build:
+      context: ./medusa
+      dockerfile: Dockerfile
+    container_name: eth-security-medusa
+    ports:
+      - "8003:8003"
+    networks:
+      - eth-security-network
+    volumes:
+      - shared_workspace:/workspace
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+
+  # Servicio Echidna - Property-based testing
+  echidna:
+    build:
+      context: ./echidna
+      dockerfile: Dockerfile
+    container_name: eth-security-echidna
+    ports:
+      - "8004:8004"
+    networks:
+      - eth-security-network
+    volumes:
+      - shared_workspace:/workspace
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+
+  # # n8n - Automatización de workflows (opcional)
+  # n8n:
+  #   image: n8nio/n8n:latest
+  #   container_name: eth-security-n8n
+  #   ports:
+  #     - "5678:5678"
+  #   environment:
+  #     - N8N_HOST=0.0.0.0
+  #     - N8N_PORT=5678
+  #     - N8N_PROTOCOL=http
+  #     - WEBHOOK_URL=http://localhost:5678/
+  #   networks:
+  #     - eth-security-network
+  #   volumes:
+  #     - n8n_data:/home/node/.n8n
+  #   restart: unless-stopped
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1.0'
+  #         memory: 1G
+
+networks:
+  eth-security-network:
+    driver: bridge
+    name: eth-security-network
+
+volumes:
+  shared_workspace:
+    name: eth_shared_workspace
+  n8n_data:
+    name: eth_n8n_data

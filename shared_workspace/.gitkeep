@@ -1,0 +1,2 @@
+# Este archivo asegura que el directorio shared_workspace se mantenga en git
+# pero sin incluir su contenido
