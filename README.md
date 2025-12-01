@@ -114,7 +114,6 @@ docker compose logs -f slither
 | Solc | 0.5 core | 512MB |
 | Medusa | 2 cores | 2GB |
 | Echidna | 2 cores | 2GB |
-| n8n | 1 core | 1GB |
 
 ## Flujo de Trabajo
 
