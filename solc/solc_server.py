@@ -100,13 +100,6 @@ async def analyze(request: AnalysisRequest = Body(...)):
             "error_type": "unexpected_error"
         }
 
-@app.get("/health")
-async def health():
-    """
-    Health check endpoint.
-    """
-    return {"status": "healthy", "service": "solc"}
-
 @app.get("/")
 async def root():
     return {"service": "Solc Compiler", "version": "1.0"}

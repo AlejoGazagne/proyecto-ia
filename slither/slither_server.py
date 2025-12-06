@@ -148,13 +148,6 @@ async def analyze(request: AnalysisRequest = Body(...)):
         logger.info("📤 RESPONSE TO API (RAW): %s", response_payload)
         return response_payload
 
-@app.get("/health")
-async def health():
-    """
-    Health check endpoint.
-    """
-    return {"status": "healthy", "service": "slither"}
-
 @app.get("/")
 async def root():
     return {"service": "Slither Analysis", "version": "1.0"}

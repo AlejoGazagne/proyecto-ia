@@ -48,6 +48,9 @@ tests/__pycache__/
 htmlcov/
 
 # Temporary files
+*.bak
+*_old.py
+app_old.py
 *.tmp
 tmp/
 temp/

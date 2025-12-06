@@ -38,9 +38,5 @@ COPY medusa_server.py .
 # Exponer puerto
 EXPOSE 8003
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8003/health')"
-
 # Arrancar servidor
 CMD ["uvicorn", "medusa_server:app", "--host", "0.0.0.0", "--port", "8003"]

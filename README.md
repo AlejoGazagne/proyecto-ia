@@ -1,4 +1,4 @@
-# ETH Security Toolbox - Arquitectura de Microservicios
+# ETH Security - Arquitectura de Microservicios
 
 Sistema de análisis de seguridad para contratos inteligentes Ethereum basado en microservicios Docker.
 
@@ -7,7 +7,11 @@ Sistema de análisis de seguridad para contratos inteligentes Ethereum basado en
 ```
 eth-security-microservices/
 ├── api/                      # API principal (FastAPI)
-│   ├── app.py
+│   ├── core/                 # Configuración y utilidades
+│   ├── models/               # Modelos Pydantic
+│   ├── routes/               # Endpoints REST
+│   ├── services/             # Lógica de negocio
+│   ├── main.py               # Punto de entrada
 │   ├── Dockerfile
 │   └── requirements.txt
 ├── slither/                  # Servicio de análisis Slither
@@ -124,6 +128,22 @@ docker compose logs -f slither
 5. API consolida resultados y devuelve respuesta unificada
 6. Archivos temporales persisten en volumen compartido
 
+## Arquitectura de la API
+
+La API principal sigue una arquitectura modular con separación de responsabilidades:
+
+- **core/**: Configuración y utilidades compartidas
+- **models/**: Modelos de datos y validación (Pydantic)
+- **routes/**: Definición de endpoints REST
+- **services/**: Lógica de negocio y servicios externos
+
+### Beneficios
+
+✅ **Mantenibilidad**: Código organizado y fácil de mantener
+✅ **Escalabilidad**: Fácil agregar nuevas funcionalidades
+✅ **Testabilidad**: Componentes independientes y testeables
+✅ **Documentación**: FastAPI genera docs automáticas en `/docs`
+
 ## Personalización
 
 ### Agregar nueva herramienta
@@ -132,11 +152,20 @@ docker compose logs -f slither
 2. Crear `newtool_server.py` con FastAPI
 3. Crear `Dockerfile` para la herramienta
 4. Agregar servicio en `docker-compose.yml`
-5. Actualizar `api/app.py` para incluir nuevo servicio
+5. Actualizar `api/core/config.py` para incluir nuevo servicio
 
 ### Modificar timeouts
 
-Editar en `api/app.py`:
+Editar en `api/core/config.py`:
 ```python
-async with httpx.AsyncClient(timeout=600.0) as client:  # 10 minutos
+SERVICE_TIMEOUT: float = 600.0  # 10 minutos
+```
+
+### Configurar variables de entorno
+
+Crear archivo `.env` en la raíz del proyecto:
+```bash
+GEMINI_API_KEY=tu_api_key_aqui
+GEMINI_MODEL=gemini-pro
+API_LOG_LEVEL=INFO
 ```
